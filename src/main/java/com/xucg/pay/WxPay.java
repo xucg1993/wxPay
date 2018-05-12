@@ -96,7 +96,7 @@ public class WxPay {
     private static final String MCHID_NOT_EXIST = "MCHID_NOT_EXIST";
 
     /**
-     * 预支付
+     * 微信小程序预支付
      *
      * @param weixinPrePay
      * @return
@@ -116,7 +116,7 @@ public class WxPay {
             String result = HttpUtil.post(WxPayConfigEnum.UNIFIEDORDER_URL.getValue(), payXml);
             Map<String, String> xmlValue = XmlUtil.getXmlValue(result);
             Map map = buildMap(xmlValue, weixinPrePay.getPayKey());
-            logger.info("小程序预支付结果: " + map);
+            logger.info("微信小程序预支付结果: " + map);
             if (WxFormatParamUtil.isPayReturnSuccess(xmlValue)) {
                 return ResultJson.getResultJsonSuccess(map);
             }
@@ -124,6 +124,7 @@ public class WxPay {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        logger.info("微信小程序支付: 系统错误");
         return ResultJson.getResultJsonError();
     }
 
@@ -156,6 +157,7 @@ public class WxPay {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        logger.info("微信H5支付: 系统错误");
         return ResultJson.getResultJsonError();
     }
 
@@ -188,6 +190,7 @@ public class WxPay {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        logger.info("微信公众号支付: 系统错误");
         return ResultJson.getResultJsonError();
     }
 
@@ -224,6 +227,7 @@ public class WxPay {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        logger.info("微信二维码支付: 系统错误");
         return ResultJson.getResultJsonError();
     }
 
@@ -259,6 +263,7 @@ public class WxPay {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        logger.info("微信支付 APP 支付: 系统错误");
         return ResultJson.getResultJsonError();
     }
 
@@ -311,14 +316,15 @@ public class WxPay {
             //将xml转成 实体类
             WeiXinPayResult result = (WeiXinPayResult) XmlUtil.convertXmlStrToObject(xmlData, WeiXinPayResult.class);
 
-            ////判断业务
+            //判断业务
             if (WxFormatParamUtil.isPayReturnSuccess(result)) {
-
                 //支付成功
+                logger.info("微信支付回调: 成功" + result);
                 return ResultJson.getResultJsonSuccess(result);
 
             } else {
                 //支付失败
+                logger.info("微信支付回调: 失败" + result);
                 response.getWriter().println(WxFormatParamUtil.resultFail());
 
                 return ResultJson.getResultJsonFail(result);
@@ -326,6 +332,7 @@ public class WxPay {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        logger.info("微信支付支付回调: 系统错误");
         return ResultJson.getResultJsonError();
     }
 
@@ -347,44 +354,53 @@ public class WxPay {
             Map<String, String> xmlValue = XmlUtil.getXmlValue(result);
             String errCode = xmlValue.get(WxPayConfigEnum.ERR_CODE.getValue());
             if (WxFormatParamUtil.isPayReturnSuccess(xmlValue)) {
-
+                logger.info("微信支付查询退款: 成功" + result);
                 return ResultJson.getResultJsonSuccess(xmlValue);
 
             } else if (SYSTEMERROR.equals(errCode)) {
                 // 	接口返回错误	系统超时
+                logger.info("微信支付查询退款: 系统超时" + result);
                 return ResultJson.getResultJsonSuccess(ResultJson.CODE_2, SYSTEMERROR, xmlValue);
 
             } else if (REFUNDNOTEXIST.equals(errCode)) {
                 //	退款订单查询失败	订单号错误或订单状态不正确
                 //  请检查订单号是否有误以及订单状态是否正确，如：未支付、已支付未退款
+                logger.info("微信支付查询退款: 查询失败" + result);
                 return ResultJson.getResultJsonSuccess(ResultJson.CODE_3, REFUNDNOTEXIST, xmlValue);
 
             } else if (INVALID_TRANSACTIONID.equals(errCode)) {
                 //无效transaction_id	请求参数未按指引进行填写
+                logger.info("微信支付查询退款: 无效transaction_id" + result);
                 return ResultJson.getResultJsonSuccess(ResultJson.CODE_4, INVALID_TRANSACTIONID, xmlValue);
 
             } else if (PARAM_ERROR.equals(errCode)) {
                 //参数错误	请求参数未按指引进行填写
+                logger.info("微信支付查询退款: 参数错误" + result);
                 return ResultJson.getResultJsonSuccess(ResultJson.CODE_5, PARAM_ERROR, xmlValue);
 
             } else if (APPID_NOT_EXIST.equals(errCode)) {
                 //APPID不存在
+                logger.info("微信支付查询退款: APPID不存在" + result);
                 return ResultJson.getResultJsonSuccess(ResultJson.CODE_6, APPID_NOT_EXIST, xmlValue);
 
             } else if (MCHID_NOT_EXIST.equals(errCode)) {
                 //MCHID不存在
+                logger.info("微信支付查询退款: MCHID不存在" + result);
                 return ResultJson.getResultJsonSuccess(ResultJson.CODE_7, MCHID_NOT_EXIST, xmlValue);
 
             } else if (REQUIRE_POST_METHOD.equals(errCode)) {
                 //	请使用post方法
+                logger.info("微信支付查询退款: 请使用post方法" + result);
                 return ResultJson.getResultJsonSuccess(ResultJson.CODE_8, REQUIRE_POST_METHOD, xmlValue);
 
             } else if (SIGNERROR.equals(errCode)) {
                 //签名错误
+                logger.info("微信支付查询退款: 签名错误" + result);
                 return ResultJson.getResultJsonSuccess(ResultJson.CODE_9, SIGNERROR, xmlValue);
 
             } else if (XML_FORMAT_ERROR.equals(errCode)) {
                 //	XML格式错误
+                logger.info("微信支付查询退款: XML格式错误" + result);
                 return ResultJson.getResultJsonSuccess(ResultJson.CODE_10, XML_FORMAT_ERROR, xmlValue);
             }
 
@@ -392,6 +408,7 @@ public class WxPay {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        logger.info("微信支付查询退款: 系统错误");
         return ResultJson.getResultJsonError();
     }
 
@@ -416,7 +433,7 @@ public class WxPay {
 
         //申请退款结果
         Map<String, String> xmlValue = XmlUtil.getXmlValue(result);
-
+        logger.info("微信申请退款结果: " + xmlValue);
         //判断结果
         if (WxFormatParamUtil.isPayReturnSuccess(xmlValue)) {
             return ResultJson.getResultJsonSuccess(xmlValue);
@@ -464,13 +481,15 @@ public class WxPay {
 
                 //判断业务通知字段
                 if (WxPayConfigEnum.SUCCESS.getValue().equals(refundCode)) {
-
+                    logger.info("微信申请退款结果: 退款成功" + xmlValue);
                     return ResultJson.getResultJsonSuccess(weiXinPayResult);
 
                 } else if (WxPayConfigEnum.CHANGE.getValue().equals(refundCode)) {
 
                     //退款异常   返回通知失败
                     response.getWriter().println(WxFormatParamUtil.resultFail());
+
+                    logger.info("微信申请退款结果: 退款异常" + xmlValue);
 
                     return ResultJson.getResultJson(ResultJson.SUCCESS_TRUE, ResultJson.CODE_2, "CHANGE", weiXinPayResult);
 
@@ -479,14 +498,16 @@ public class WxPay {
                     //退款关闭   返回通知失败
                     response.getWriter().println(WxFormatParamUtil.resultFail());
 
+                    logger.info("微信申请退款结果: 退款关闭" + xmlValue);
+
                     return ResultJson.getResultJson(ResultJson.SUCCESS_TRUE, ResultJson.CODE_3, "REFUNDCLOSE", weiXinPayResult);
 
                 }
 
             } else {
-                //收微信服务器通知失败
+                //接收微信服务器通知失败
                 response.getWriter().println(WxFormatParamUtil.resultFail());
-
+                logger.info("微信申请退款结果: 接收微信服务器通知失败");
                 return ResultJson.getResultJsonFail(weiXinPayResult);
             }
         } catch (Exception e) {
@@ -494,6 +515,7 @@ public class WxPay {
             e.printStackTrace();
         }
         response.getWriter().println(WxFormatParamUtil.resultFail());
+        logger.info("微信申请退款结果: 系统错误");
         return ResultJson.getResultJsonError();
     }
 
@@ -526,31 +548,37 @@ public class WxPay {
                 if (SUCCESS.equals(tradeState)) {
                     //return_code 、result_code、trade_state都为SUCCESS时有返回
                     //支付成功
+                    logger.info("微信支付查询结果: 支付成功" + xmlValue);
                     return ResultJson.getResultJsonSuccess(xmlValue);
                 }
 
                 if (REFUND.equals(tradeState)) {
                     //转入退款
+                    logger.info("微信支付查询结果: 转入退款" + xmlValue);
                     return ResultJson.getResultJsonSuccess(ResultJson.CODE_2, REFUND, xmlValue);
                 }
 
                 if (NOTPAY.equals(tradeState)) {
                     //未支付
+                    logger.info("微信支付查询结果: 未支付" + xmlValue);
                     return ResultJson.getResultJsonSuccess(ResultJson.CODE_3, NOTPAY, xmlValue);
                 }
 
                 if (CLOSED.equals(tradeState)) {
                     //已关闭
+                    logger.info("微信支付查询结果: 已关闭" + xmlValue);
                     return ResultJson.getResultJsonSuccess(ResultJson.CODE_4, CLOSED, xmlValue);
                 }
 
                 if (REVOKED.equals(tradeState)) {
                     //已撤销（刷卡支付）
+                    logger.info("微信支付查询结果: 已撤销" + xmlValue);
                     return ResultJson.getResultJsonSuccess(ResultJson.CODE_5, REVOKED, xmlValue);
                 }
 
                 if (USERPAYING.equals(tradeState)) {
                     //用户支付中
+                    logger.info("微信支付查询结果: 用户支付中" + xmlValue);
                     return ResultJson.getResultJsonSuccess(ResultJson.CODE_6, USERPAYING, xmlValue);
                 }
 
@@ -564,6 +592,7 @@ public class WxPay {
             e.printStackTrace();
         }
         //系统错误
+        logger.info("微信支付查询: 系统错误");
         return ResultJson.getResultJsonError();
     }
 
@@ -588,37 +617,43 @@ public class WxPay {
             String errCode = xmlValue.get(WxPayConfigEnum.ERR_CODE.getValue());
 
             if (WxFormatParamUtil.isPayReturnSuccess(xmlValue)) {
-
+                logger.info("微信支付关闭订单结果: 关闭成功" + xmlValue);
                 return ResultJson.getResultJsonSuccess(xmlValue);
 
             } else if (ORDERPAID.equals(errCode)) {
 
                 //订单已支付
+                logger.info("微信支付关闭订单结果: 已支付" + xmlValue);
                 return ResultJson.getResultJsonSuccess(ResultJson.CODE_2, ORDERPAID, xmlValue);
 
             } else if (SYSTEMERROR.equals(errCode)) {
 
                 //系统错误
+                logger.info("微信支付关闭订单结果: 系统错误" + xmlValue);
                 return ResultJson.getResultJsonSuccess(ResultJson.CODE_3, SYSTEMERROR, xmlValue);
 
             } else if (ORDERCLOSED.equals(errCode)) {
 
                 //订单已关闭
+                logger.info("微信支付关闭订单结果: 已关闭" + xmlValue);
                 return ResultJson.getResultJsonSuccess(ResultJson.CODE_4, ORDERCLOSED, xmlValue);
 
             } else if (SIGNERROR.equals(errCode)) {
 
                 //签名错误
+                logger.info("微信支付关闭订单结果: 签名错误" + xmlValue);
                 return ResultJson.getResultJsonSuccess(ResultJson.CODE_5, SIGNERROR, xmlValue);
 
             } else if (REQUIRE_POST_METHOD.equals(errCode)) {
 
                 //请使用post方法
+                logger.info("微信支付关闭订单结果: 请使用post方法" + xmlValue);
                 return ResultJson.getResultJsonSuccess(ResultJson.CODE_6, REQUIRE_POST_METHOD, xmlValue);
 
             } else if (XML_FORMAT_ERROR.equals(errCode)) {
 
                 //XML格式错误
+                logger.info("微信支付关闭订单结果: XML格式错误" + xmlValue);
                 return ResultJson.getResultJsonSuccess(ResultJson.CODE_7, XML_FORMAT_ERROR, xmlValue);
 
             }
@@ -626,6 +661,7 @@ public class WxPay {
             e.printStackTrace();
         }
         //系统错误
+        logger.info("微信支付关闭订单: 系统错误");
         return ResultJson.getResultJsonError();
     }
 

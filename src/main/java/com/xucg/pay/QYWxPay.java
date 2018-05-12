@@ -5,6 +5,8 @@ import com.xucg.model.WeiXinPrePay;
 import com.xucg.util.wx.ClientCustomSSL;
 import com.xucg.util.wx.WxFormatParamUtil;
 import com.xucg.util.xml.XmlUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
@@ -13,6 +15,7 @@ import java.util.Map;
  * @date 2018.05.07
  */
 public class QYWxPay {
+    private static final Logger logger = LoggerFactory.getLogger("wxPay sdk");
 
     private static final String TRANSFERS_URL = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
 
@@ -26,24 +29,31 @@ public class QYWxPay {
      */
     private static String transfers(WeiXinPrePay weixinPrePay, String filePath) throws Exception {
 
-        //签名算法计算得出的签名值
-        weixinPrePay.setSign(WxFormatParamUtil.buildSignStr(weixinPrePay));
+        try {
+            //签名算法计算得出的签名值
+            weixinPrePay.setSign(WxFormatParamUtil.buildSignStr(weixinPrePay));
 
-        //申请退款XML
-        String payXml = WxFormatParamUtil.buildPayXml(weixinPrePay);
+            //申请退款XML
+            String payXml = WxFormatParamUtil.buildPayXml(weixinPrePay);
 
-        String result = ClientCustomSSL.request(TRANSFERS_URL, weixinPrePay.getMchId(), payXml, filePath);
+            String result = ClientCustomSSL.request(TRANSFERS_URL, weixinPrePay.getMchId(), payXml, filePath);
 
-        Map<String, String> xmlValue = XmlUtil.getXmlValue(result);
-        //判断结果
-        if (WxFormatParamUtil.isPayReturnSuccess(xmlValue)) {
-            return ResultJson.getResultJsonSuccess(xmlValue);
+            Map<String, String> xmlValue = XmlUtil.getXmlValue(result);
+            logger.info("微信转账结果" + xmlValue);
+            //判断结果
+            if (WxFormatParamUtil.isPayReturnSuccess(xmlValue)) {
+                return ResultJson.getResultJsonSuccess(xmlValue);
+            }
+            return ResultJson.getResultJsonFail(xmlValue);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return ResultJson.getResultJsonFail(xmlValue);
+        logger.info("微信转账结果 : 系统异常");
+        return ResultJson.getResultJsonError();
     }
 
     public static void main(String[] args) {
-        WeiXinPrePay prePay = new WeiXinPrePay(null,"1486668342","8WOyzGdw5AKjtqUodOVKQ2mlxse1Q1qZ");
+        WeiXinPrePay prePay = new WeiXinPrePay(null, "1486668342", "8WOyzGdw5AKjtqUodOVKQ2mlxse1Q1qZ");
         prePay.setMchAppId(prePay.getAppid());
         prePay.setOpenId("o6iPM4rL6rkaK4rHHh7uxRdxa9wM");
         prePay.setPartnerTradeNo("20181123100312");
