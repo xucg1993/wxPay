@@ -1,5 +1,6 @@
 package com.xucg.pay;
 
+import com.xucg.config.DefaultWeiXinModel;
 import com.xucg.model.ResultJson;
 import com.xucg.model.WeiXinPrePay;
 import com.xucg.util.wx.ClientCustomSSL;
@@ -27,7 +28,7 @@ public class QYWxPay {
      * @return
      * @throws Exception
      */
-    private static String transfers(WeiXinPrePay weixinPrePay, String filePath) throws Exception {
+    public static String transfers(WeiXinPrePay weixinPrePay, String filePath) throws Exception {
 
         try {
             //签名算法计算得出的签名值
@@ -36,7 +37,7 @@ public class QYWxPay {
             //申请退款XML
             String payXml = WxFormatParamUtil.buildPayXml(weixinPrePay);
 
-            String result = ClientCustomSSL.request(TRANSFERS_URL, weixinPrePay.getMchId(), payXml, filePath);
+            String result = ClientCustomSSL.request(TRANSFERS_URL, weixinPrePay.getqMchId(), payXml, filePath);
 
             Map<String, String> xmlValue = XmlUtil.getXmlValue(result);
             logger.info("微信转账结果" + xmlValue);
@@ -53,8 +54,9 @@ public class QYWxPay {
     }
 
     public static void main(String[] args) {
-        WeiXinPrePay prePay = new WeiXinPrePay(null, "1486668342", "8WOyzGdw5AKjtqUodOVKQ2mlxse1Q1qZ");
-        prePay.setMchAppId(prePay.getAppid());
+        WeiXinPrePay prePay = new WeiXinPrePay("WRYEC0EgrjGdbxU5AVZBRpYQ7r95Dmc9");
+        prePay.setMchAppId("wxb24d7e2ad00d103b");
+        prePay.setqMchId("1502029451");
         prePay.setOpenId("o6iPM4rL6rkaK4rHHh7uxRdxa9wM");
         prePay.setPartnerTradeNo("20181123100312");
         prePay.setCheckName("FORCE_CHECK");
@@ -64,10 +66,9 @@ public class QYWxPay {
         prePay.setSpbillCreateIp("127.0.0.1");
         String s = "";
         try {
-            s = transfers(prePay, "C:\\Users\\lili\\Desktop\\hanchu_apiclient_cert.p12");
+            s = transfers(prePay, "C:\\Users\\lili\\Desktop\\apiclient_cert.p12");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(s);
     }
 }

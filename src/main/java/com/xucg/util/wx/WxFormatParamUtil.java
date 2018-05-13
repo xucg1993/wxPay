@@ -119,6 +119,9 @@ public class WxFormatParamUtil {
         if (!StringUtil.isNullorEmpty(pay.getMchAppId())) {
             data.put("mch_appid", pay.getMchAppId());
         }
+        if (!StringUtil.isNullorEmpty(pay.getqMchId())) {
+            data.put("mchid", pay.getqMchId());
+        }
         //校验用户姓名选项
         if (!StringUtil.isNullorEmpty(pay.getCheckName())) {
             data.put("check_name", pay.getCheckName());

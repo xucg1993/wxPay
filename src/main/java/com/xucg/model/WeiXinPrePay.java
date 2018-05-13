@@ -103,6 +103,7 @@ public class WeiXinPrePay {
      * 微信支付分配的商户号
      */
     private String mchId;
+    private String qMchId;
     /**
      * 支付密钥
      */
@@ -300,6 +301,14 @@ public class WeiXinPrePay {
         this.mchId = mchId;
     }
 
+    public String getqMchId() {
+        return qMchId;
+    }
+
+    public void setqMchId(String qMchId) {
+        this.qMchId = qMchId;
+    }
+
     public String getPayKey() {
         return payKey;
     }
@@ -335,6 +344,11 @@ public class WeiXinPrePay {
     public WeiXinPrePay(String appId, String mchId, String payKey) {
         this.setAppid(appId);
         this.setMchId(mchId);
+        this.setPayKey(payKey);
+        this.setNonceStr(WxFormatParamUtil.getNonceStr());
+    }
+
+    public WeiXinPrePay(String payKey) {
         this.setPayKey(payKey);
         this.setNonceStr(WxFormatParamUtil.getNonceStr());
     }
