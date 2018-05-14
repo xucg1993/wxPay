@@ -319,12 +319,12 @@ public class WxPay {
             //判断业务
             if (WxFormatParamUtil.isPayReturnSuccess(result)) {
                 //支付成功
-                logger.info("微信支付回调: 成功" + result);
+                logger.info("微信支付回调: 成功" + xmlData);
                 return ResultJson.getResultJsonSuccess(result);
 
             } else {
                 //支付失败
-                logger.info("微信支付回调: 失败" + result);
+                logger.info("微信支付回调: 失败" + xmlData);
                 response.getWriter().println(WxFormatParamUtil.resultFail());
 
                 return ResultJson.getResultJsonFail(result);
