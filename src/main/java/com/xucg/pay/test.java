@@ -12,22 +12,41 @@ import com.xucg.model.WeiXinPrePay;
  */
 public class test {
     public static void main(String[] args) {
-        WeiXinPrePay weiXinPrePay = DefaultWeiXinModel.getDefaultWeiXinModel();
+//        WeiXinPrePay weiXinPrePay = DefaultWeiXinModel.getDefaultWeiXinModel();
+//
+//        //商品描述
+//        weiXinPrePay.setBody("测试");
+//        //订单编号
+//        weiXinPrePay.setOutTradeNo("20180226123156");
+//        //订单金额   单位：分
+//        weiXinPrePay.setTotalFee(1000);
+//        //终端Ip
+//        weiXinPrePay.setSpbillCreateIp("127.0.0.1");
+//        //回调地址
+//        weiXinPrePay.setNotifyUrl("http://www.baidu.com");
+//
+//        weiXinPrePay.setOpenId("o6iPM4gzFb3ufH3KcIz0N9tLwXP0");
+//
+//        String scanCodePay = WxPay.miniAppPay(weiXinPrePay);
 
-        //商品描述
-        weiXinPrePay.setBody("测试");
-        //订单编号
-        weiXinPrePay.setOutTradeNo("20180226123156");
-        //订单金额   单位：分
-        weiXinPrePay.setTotalFee(1000);
-        //终端Ip
-        weiXinPrePay.setSpbillCreateIp("127.0.0.1");
-        //回调地址
-        weiXinPrePay.setNotifyUrl("http://www.baidu.com");
 
-        weiXinPrePay.setOpenId("o6iPM4gzFb3ufH3KcIz0N9tLwXP0");
+//        WeiXinPrePay prePay = new WeiXinPrePay("WRYEC0EgrjGdbxU5AVZBRpYQ7r95Dmc9");
+//        prePay.setMchAppId("wxb24d7e2ad00d103b");
+//        prePay.setqMchId("1502029451");
+//        prePay.setOpenId("o6iPM4rL6rkaK4rHHh7uxRdxa9wM");
+//        prePay.setPartnerTradeNo("20181123100312");
+//        prePay.setCheckName("FORCE_CHECK");
+//        prePay.setReUserName("徐晨光");
+//        prePay.setAmount(100);
+//        prePay.setDesc("测试");
+//        prePay.setSpbillCreateIp("127.0.0.1");
+//        String s = "";
+//        try {
+//            s = QYWxPay.transfers(prePay, "C:\\Users\\lili\\Desktop\\apiclient_cert.p12");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
-        String scanCodePay = WxPay.miniAppPay(weiXinPrePay);
-        System.out.println(scanCodePay);
+
     }
 }
