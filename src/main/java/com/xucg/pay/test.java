@@ -53,7 +53,7 @@ public class test {
                 "1502029451",//水站子商户号
                 "wxd79ceb5d2f034a68",//犁里公众号appid
                 "wxc66d3d0c1e281982",//水站公众号appid
-                "2oeTUVFrBRrHaW0I6Bz4On88d511OAT4");//犁里服务号支付密钥
+                "2oeTUVFrBRrHaW0I6Bz4On88d511OAT4");//犁里服务商支付密钥
 
         //订单号
         model.setMchBillno("20180514092741052000001");
