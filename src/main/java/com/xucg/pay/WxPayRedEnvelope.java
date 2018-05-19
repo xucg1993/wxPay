@@ -58,11 +58,11 @@ public class WxPayRedEnvelope {
 
     //
     public static void main(String[] args) {
-        WeiXinRedEnvelopeModel model = new WeiXinRedEnvelopeModel("1491328582",
-                "1502029451",
-                "wxc66d3d0c1e281982",
-                "wxc66d3d0c1e281982",
-                "ea19d25e1cf46faa4d1166ef75b8d1d8");
+        WeiXinRedEnvelopeModel model = new WeiXinRedEnvelopeModel("1491328582",//犁里服务商户号
+                "1502029451",//水站子商户号
+                "wxd79ceb5d2f034a68",//犁里公众号appid
+                "wxc66d3d0c1e281982",//水站appid
+                "2oeTUVFrBRrHaW0I6Bz4On88d511OAT4");//犁里服务号支付密钥
         model.setMchBillno("20180514092741052000001");
         //商户名称
         model.setSendName("测试");
@@ -83,7 +83,7 @@ public class WxPayRedEnvelope {
         //场景id
 //        model.setSceneId("PRODUCT_5");
         try {
-            request(model, "C:\\Users\\lili\\Desktop\\lili_apiclient_cert.p12");
+            request(model, "C:\\Users\\XCG\\Documents\\WeChat Files\\xcg_1103\\Files\\apiclient_cert.p12");
         } catch (Exception e) {
             e.printStackTrace();
         }
