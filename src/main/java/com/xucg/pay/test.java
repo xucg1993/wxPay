@@ -52,12 +52,14 @@ public class test {
         WeiXinRedEnvelopeModel model = new WeiXinRedEnvelopeModel("1491328582",//犁里服务商户号
                 "1502029451",//水站子商户号
                 "wxd79ceb5d2f034a68",//犁里公众号appid
-                "wxc66d3d0c1e281982",//水站appid
+                "wxc66d3d0c1e281982",//水站公众号appid
                 "2oeTUVFrBRrHaW0I6Bz4On88d511OAT4");//犁里服务号支付密钥
+
+        //订单号
         model.setMchBillno("20180514092741052000001");
         //商户名称
         model.setSendName("测试");
-        //用户openid
+        //用户openid   水站公众号的openid
         model.setReOpenid("ozKxd1vn0BPcsjaK5zBhBNq4Mu_w");
         //付款金额
         model.setTotalAmount(100);
