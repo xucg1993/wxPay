@@ -1,8 +1,7 @@
 package com.xucg.pay;
 
 import com.xucg.model.ResultJson;
-import com.xucg.model.WeiXinPrePay;
-import com.xucg.model.WeiXinRedEnvelopeModel;
+import com.xucg.model.WxPayTransferDibModel;
 import com.xucg.util.wx.ClientCustomSSL;
 import com.xucg.util.wx.WxFormatParamUtil;
 import com.xucg.util.xml.XmlUtil;
@@ -15,7 +14,7 @@ import java.util.Map;
  * @author xuchenguang
  * @date 2018.05.07
  */
-public class QYWxPay {
+public class WxPayTransferDib {
     private static final Logger logger = LoggerFactory.getLogger("wxPay sdk");
 
     private static final String TRANSFERS_URL = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
@@ -23,24 +22,24 @@ public class QYWxPay {
     /**
      * 企业商户向用户微信账户零钱转账
      *
-     * @param weixinPrePay
+     * @param model
      * @param filePath
      * @return
      * @throws Exception
      */
-    public static String transfers(WeiXinPrePay weixinPrePay, String filePath) throws Exception {
+    public static String request(WxPayTransferDibModel model, String filePath) throws Exception {
 
         try {
             //签名算法计算得出的签名值
-            weixinPrePay.setSign(WxFormatParamUtil.buildSignStr(weixinPrePay));
+            model.setSign(WxPayTransferDibModel.buildSignStr(model));
 
             //申请退款XML
-            String payXml = WxFormatParamUtil.buildPayXml(weixinPrePay);
+            String payXml = WxPayTransferDibModel.buildPayXml(model);
 
-            String result = ClientCustomSSL.request(TRANSFERS_URL, weixinPrePay.getqMchId(), payXml, filePath);
+            String result = ClientCustomSSL.request(TRANSFERS_URL, model.getMchId(), payXml, filePath);
 
             Map<String, String> xmlValue = XmlUtil.getXmlValue(result);
-            logger.info("微信转账结果" + xmlValue);
+            logger.info("微信转账结果 : " + xmlValue);
             //判断结果
             if (WxFormatParamUtil.isPayReturnSuccess(xmlValue)) {
                 return ResultJson.getResultJsonSuccess(xmlValue);

@@ -6,7 +6,7 @@ package com.xucg.model;
  * @author xucg
  * @since 2017/11/17
  */
-public class WeiXinPayResult {
+public class WxPayResultModel {
     /**
      * 返回状态码 SUCCESS/FAIL
      */

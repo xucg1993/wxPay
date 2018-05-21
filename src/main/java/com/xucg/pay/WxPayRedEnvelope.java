@@ -1,7 +1,7 @@
 package com.xucg.pay;
 
 import com.xucg.model.ResultJson;
-import com.xucg.model.WeiXinRedEnvelopeModel;
+import com.xucg.model.WxPayRedEnvelopeModel;
 import com.xucg.util.wx.ClientCustomSSL;
 import com.xucg.util.wx.WxFormatParamUtil;
 import com.xucg.util.xml.XmlUtil;
@@ -35,13 +35,13 @@ public class WxPayRedEnvelope {
      * @param filePath
      * @throws Exception
      */
-    public static String request(WeiXinRedEnvelopeModel redEnvelopeModel, String filePath) throws Exception {
+    public static String request(WxPayRedEnvelopeModel redEnvelopeModel, String filePath) throws Exception {
 
         //签名算法计算得出的签名值
-        redEnvelopeModel.setSign(WeiXinRedEnvelopeModel.buildSignStr(redEnvelopeModel));
+        redEnvelopeModel.setSign(WxPayRedEnvelopeModel.buildSignStr(redEnvelopeModel));
 
         //申请退款XML
-        String payXml = WeiXinRedEnvelopeModel.buildPayXml(redEnvelopeModel);
+        String payXml = WxPayRedEnvelopeModel.buildPayXml(redEnvelopeModel);
 
         String result = ClientCustomSSL.request(REQUEST_URL, redEnvelopeModel.getMchId(), payXml, filePath);
 

@@ -13,7 +13,7 @@ import java.util.Map;
  * @author xuchenguang
  * @date 2018.05.18
  */
-public class WeiXinRedEnvelopeModel {
+public class WxPayRedEnvelopeModel {
 
     /**
      * 随机字符串*
@@ -268,7 +268,7 @@ public class WeiXinRedEnvelopeModel {
      * @param redEnvelopeModel
      * @return
      */
-    public static Map<String, Object> buildWeiXinRedEnvelopeModelToMap(WeiXinRedEnvelopeModel redEnvelopeModel) {
+    public static Map<String, Object> buildWeiXinRedEnvelopeModelToMap(WxPayRedEnvelopeModel redEnvelopeModel) {
 
         Map<String, Object> data = new HashMap<>(16);
 
@@ -354,7 +354,7 @@ public class WeiXinRedEnvelopeModel {
      * @param pay
      * @return
      */
-    public static String buildSignStr(WeiXinRedEnvelopeModel pay) throws Exception {
+    public static String buildSignStr(WxPayRedEnvelopeModel pay) throws Exception {
         return WXPayUtil.generateSignature(buildWeiXinRedEnvelopeModelToMap(pay), pay.getPayKey());
     }
 
@@ -365,12 +365,12 @@ public class WeiXinRedEnvelopeModel {
      * @param pay
      * @return
      */
-    public static String buildPayXml(WeiXinRedEnvelopeModel pay) throws Exception {
+    public static String buildPayXml(WxPayRedEnvelopeModel pay) throws Exception {
         return WXPayUtil.mapToXml(buildWeiXinRedEnvelopeModelToMap(pay));
     }
 
 
-    public WeiXinRedEnvelopeModel(String mchId, String subMchId, String wxAppId, String msgAppId, String payKey) {
+    public WxPayRedEnvelopeModel(String mchId, String subMchId, String wxAppId, String msgAppId, String payKey) {
 
         this.setNonceStr(WxFormatParamUtil.getNonceStr());
         this.setMchId(mchId);

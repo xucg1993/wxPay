@@ -1,6 +1,6 @@
 package com.xucg.config;
 
-import com.xucg.model.WeiXinPrePay;
+import com.xucg.model.WxPayPrePayModel;
 
 /**
  * 微信支付
@@ -18,7 +18,7 @@ public class DefaultWeiXinModel {
      *
      * @return
      */
-    public static WeiXinPrePay getDefaultWeiXinModel() {
-        return new WeiXinPrePay(appId, mchId, payKey);
+    public static WxPayPrePayModel getDefaultWeiXinModel() {
+        return new WxPayPrePayModel(appId, mchId, payKey);
     }
 }

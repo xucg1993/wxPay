@@ -1,6 +1,12 @@
 package com.xucg.model;
 
+import com.xucg.config.WxPayConfigEnum;
+import com.xucg.util.string.StringUtil;
+import com.xucg.util.wx.WXPayUtil;
 import com.xucg.util.wx.WxFormatParamUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 微信预支付
@@ -8,30 +14,7 @@ import com.xucg.util.wx.WxFormatParamUtil;
  * @author xucg
  * @since 2017/11/8
  */
-public class WeiXinPrePay {
-
-    /**
-     * 商户appId
-     */
-    private String mchAppId;
-
-    /**
-     * 校验用户姓名选项
-     */
-    private String checkName;
-    /**
-     * 收款用户姓名
-     */
-    private String reUserName;
-    /**
-     * 金额
-     */
-    private Integer amount;
-
-    /**
-     * 企业付款描述信息
-     */
-    private String desc;
+public class WxPayPrePayModel {
 
     /**
      * appid
@@ -67,95 +50,68 @@ public class WeiXinPrePay {
      * 退款号
      */
     private String outRefundNo;
+
     /**
      * 终端ip: APP和网页支付提交用户端ip，Native支付填调用微信支付API的机器IP
      */
     private String spbillCreateIp;
+
     /**
      * 总金额，单位：分，整数
      */
     private Integer totalFee;
+
     /**
      * 退款金额，单位：分，整数
      */
     private Integer refundFee;
+
     /**
      * 签名
      */
     private String sign;
+
     /***/
     private String prepayId;
+
     /***/
     private long timesTamp;
+
     /**
      * 是否已经支付过了，1：是，0：否
      */
     private int payed;
+
     /**
      * 商品ID
      */
     private String productId;
+
     /**
      * 二维码链接
      */
     private String codeUrl;
+
     /**
      * 微信支付分配的商户号
      */
     private String mchId;
-    private String qMchId;
+
     /**
      * 支付密钥
      */
     private String payKey;
+
     /**
      * 支付类型
      */
     private String tradeType;
+
     /**
      * 场景信息
      */
     private String sceneInfo;
 
-    public String getMchAppId() {
-        return mchAppId;
-    }
-
-    public void setMchAppId(String mchAppId) {
-        this.mchAppId = mchAppId;
-    }
-
-    public String getCheckName() {
-        return checkName;
-    }
-
-    public void setCheckName(String checkName) {
-        this.checkName = checkName;
-    }
-
-    public String getReUserName() {
-        return reUserName;
-    }
-
-    public void setReUserName(String reUserName) {
-        this.reUserName = reUserName;
-    }
-
-    public Integer getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Integer amount) {
-        this.amount = amount;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
 
     public String getAppid() {
         return appid;
@@ -301,14 +257,6 @@ public class WeiXinPrePay {
         this.mchId = mchId;
     }
 
-    public String getqMchId() {
-        return qMchId;
-    }
-
-    public void setqMchId(String qMchId) {
-        this.qMchId = qMchId;
-    }
-
     public String getPayKey() {
         return payKey;
     }
@@ -334,6 +282,87 @@ public class WeiXinPrePay {
     }
 
     /**
+     * 将实体类封装成map
+     *
+     * @param model
+     * @return
+     */
+    public static Map<String, Object> buildToMap(WxPayPrePayModel model) {
+        Map<String, Object> data = new HashMap<>(16);
+
+        if (!StringUtil.isNullorEmpty(model.getPartnerTradeNo())) {
+            data.put("partner_trade_no", model.getPartnerTradeNo());
+        }
+
+        if (!StringUtil.isNullorEmpty(model.getAppid())) {
+            data.put("appid", model.getAppid());
+        }
+        if (!StringUtil.isNullorEmpty(model.getMchId())) {
+            data.put("mch_id", model.getMchId());
+        }
+        if (!StringUtil.isNullorEmpty(model.getNonceStr())) {
+            data.put("nonce_str", model.getNonceStr());
+        }
+        if (!StringUtil.isNullorEmpty(model.getNotifyUrl())) {
+            data.put("notify_url", model.getNotifyUrl());
+        }
+        if (!StringUtil.isNullorEmpty(model.getBody())) {
+            data.put("body", model.getBody());
+        }
+        if (!StringUtil.isNullorEmpty(model.getOutRefundNo())) {
+            data.put("out_refund_no", model.getOutRefundNo());
+        }
+        if (!StringUtil.isNullorEmpty(model.getOutTradeNo())) {
+            data.put("out_trade_no", model.getOutTradeNo());
+        }
+        if (!StringUtil.isNullorEmpty(model.getOpenId())) {
+            data.put("openid", model.getOpenId());
+        }
+        if (!StringUtil.isNullorEmpty(model.getSpbillCreateIp())) {
+            data.put("spbill_create_ip", model.getSpbillCreateIp());
+        }
+        if (model.getRefundFee() != null) {
+            data.put("refund_fee", model.getRefundFee());
+        }
+        if (model.getTotalFee() != null) {
+            data.put("total_fee", model.getTotalFee());
+        }
+        if (!StringUtil.isNullorEmpty(model.getTradeType()) && model.getTradeType().equals(WxPayConfigEnum.WXPAY_MWEB.getValue())) {
+            data.put("scene_info", model.getSceneInfo());
+        }
+        if (!StringUtil.isNullorEmpty(model.getTradeType())) {
+            data.put("trade_type", model.getTradeType());
+        }
+        if (!StringUtil.isNullorEmpty(model.getSign())) {
+            data.put("sign", model.getSign());
+        }
+        return data;
+    }
+
+
+    /**
+     * 微信支付
+     * 加密sign之前 将参数拼接成字符串并加密
+     *
+     * @param pay
+     * @return
+     */
+    public static String buildSignStr(WxPayPrePayModel pay) throws Exception {
+        return WXPayUtil.generateSignature(buildToMap(pay), pay.getPayKey());
+    }
+
+    /**
+     * 微信支付
+     * 拼接Xml格式
+     *
+     * @param pay
+     * @return
+     */
+    public static String buildPayXml(WxPayPrePayModel pay) throws Exception {
+        return WXPayUtil.mapToXml(buildToMap(pay));
+    }
+
+    /**
      * 微信默认配置
      *
      * @param appId
@@ -341,15 +370,11 @@ public class WeiXinPrePay {
      * @param payKey
      * @return
      */
-    public WeiXinPrePay(String appId, String mchId, String payKey) {
+    public WxPayPrePayModel(String appId, String mchId, String payKey) {
         this.setAppid(appId);
         this.setMchId(mchId);
         this.setPayKey(payKey);
         this.setNonceStr(WxFormatParamUtil.getNonceStr());
     }
 
-    public WeiXinPrePay(String payKey) {
-        this.setPayKey(payKey);
-        this.setNonceStr(WxFormatParamUtil.getNonceStr());
-    }
 }
