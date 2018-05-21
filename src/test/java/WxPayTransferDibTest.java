@@ -1,4 +1,3 @@
-import com.xucg.model.WxPayRedEnvelopeModel;
 import com.xucg.model.WxPayTransferDibModel;
 import com.xucg.pay.WxPayTransferDib;
 

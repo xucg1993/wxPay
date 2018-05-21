@@ -1,6 +1,5 @@
 package com.xucg.util.wx;
 
-import com.xucg.config.WxPayConfigEnum;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
