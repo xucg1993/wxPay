@@ -1,9 +1,5 @@
 package com.xucg.pay;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.xucg.model.WxPayTransferDibModel;
 import com.xucg.util.wx.ClientCustomSSL;
 import com.xucg.util.wx.WXPayUtil;
 import com.xucg.util.wx.WxFormatParamUtil;
