@@ -8,8 +8,8 @@ import com.xucg.pay.WxPay;
  */
 public class WxPayTest {
 
-    public static void main(String[] args) {
-        WxPayPrePayModel model = DefaultWeiXinModel.getDefaultWeiXinModel();
+    public static void main(String[] args) throws Exception{
+       /* WxPayPrePayModel model = DefaultWeiXinModel.getDefaultWeiXinModel();
 
         //商品描述
         model.setBody("测试");
@@ -24,6 +24,21 @@ public class WxPayTest {
 
         model.setOpenId("o6iPM4gzFb3ufH3KcIz0N9tLwXP0");
 
-        WxPay.miniAppPay(model);
+        WxPay.miniAppPay(model);*/
+
+        WxPayPrePayModel model = DefaultWeiXinModel.getDefaultWeiXinModel();
+        //订单编号
+        model.setOutTradeNo("201713468");
+
+        //退款单号
+        model.setOutRefundNo("201713468");
+
+        //订单金额   单位：分
+        model.setTotalFee(1);
+
+        //退款金额   单位：分
+        model.setRefundFee(1);
+
+        WxPay.refund(model,"classpath:\\cert\\apiclient_cert.p12");
     }
 }

@@ -1,6 +1,5 @@
 package com.xucg.util.rsa;
 
-import com.sun.org.apache.xml.internal.security.utils.Base64;
 import org.springframework.util.ResourceUtils;
 
 import javax.crypto.Cipher;
@@ -98,13 +97,4 @@ public class RSAUtils {
         }
     }
 
-
-    public static void main(String[] args) throws Exception {
-        PublicKey publicKey = getPublicKey("C:\\Users\\lili\\Desktop\\证书\\publicKey_PSCK#8.pem");
-        String name = "徐晨光";
-        String rsa = "RSA/ECB/OAEPWITHSHA-1ANDMGF1PADDING";
-        byte[] encrypt = encrypt(name.getBytes(), publicKey, 2048, 11, rsa);
-        String encode = Base64.encode(encrypt);
-        System.out.println(encode);
-    }
 }
