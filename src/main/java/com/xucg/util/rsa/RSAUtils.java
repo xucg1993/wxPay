@@ -1,7 +1,9 @@
 package com.xucg.util.rsa;
 
+import com.sun.org.apache.xml.internal.security.utils.Base64;
 import org.springframework.util.ResourceUtils;
 
+import javax.crypto.Cipher;
 import java.io.*;
 import java.security.KeyFactory;
 import java.security.PublicKey;
@@ -56,5 +58,53 @@ public class RSAUtils {
                 throw new Exception("INPUT STREAM CLOSE ERROR:", e);
             }
         }
+    }
+
+
+    public static byte[] encrypt(byte[] plainBytes, PublicKey publicKey, int keyLength, int reserveSize, String cipherAlgorithm) throws Exception {
+        int keyByteSize = keyLength / 8;
+        int encryptBlockSize = keyByteSize - reserveSize;
+        int nBlock = plainBytes.length / encryptBlockSize;
+        if ((plainBytes.length % encryptBlockSize) != 0) {
+            nBlock += 1;
+        }
+        ByteArrayOutputStream outbuf = null;
+        try {
+            Cipher cipher = Cipher.getInstance(cipherAlgorithm);
+            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+
+            outbuf = new ByteArrayOutputStream(nBlock * keyByteSize);
+            for (int offset = 0; offset < plainBytes.length; offset += encryptBlockSize) {
+                int inputLen = plainBytes.length - offset;
+                if (inputLen > encryptBlockSize) {
+                    inputLen = encryptBlockSize;
+                }
+                byte[] encryptedBlock = cipher.doFinal(plainBytes, offset, inputLen);
+                outbuf.write(encryptedBlock);
+            }
+            outbuf.flush();
+            return outbuf.toByteArray();
+        } catch (Exception e) {
+            throw new Exception("ENCRYPT ERROR:", e);
+        } finally {
+            try {
+                if (outbuf != null) {
+                    outbuf.close();
+                }
+            } catch (Exception e) {
+                outbuf = null;
+                throw new Exception("CLOSE ByteArrayOutputStream ERROR:", e);
+            }
+        }
+    }
+
+
+    public static void main(String[] args) throws Exception {
+        PublicKey publicKey = getPublicKey("C:\\Users\\lili\\Desktop\\证书\\publicKey_PSCK#8.pem");
+        String name = "徐晨光";
+        String rsa = "RSA/ECB/OAEPWITHSHA-1ANDMGF1PADDING";
+        byte[] encrypt = encrypt(name.getBytes(), publicKey, 2048, 11, rsa);
+        String encode = Base64.encode(encrypt);
+        System.out.println(encode);
     }
 }
