@@ -8,6 +8,8 @@ public enum WxPayConfigEnum {
 
     UNIFIEDORDER_URL("统一下单URL", "https://api.mch.weixin.qq.com/pay/unifiedorder"),
 
+    MICRO_PAY_URL("统一下单URL", "https://api.mch.weixin.qq.com/pay/micropay"),
+
     ORDERQUERY_URL("查询订单URL", "https://api.mch.weixin.qq.com/pay/orderquery"),
 
     REFUND_URL("申请退款URL", "https://api.mch.weixin.qq.com/secapi/pay/refund"),

@@ -19,7 +19,7 @@ public class WxPayPrePayModel {
     /**
      * appid
      */
-    private String appid;
+    private String appId;
     /**
      * 简要描述，订单描述不能是中文，不能是中文
      */
@@ -113,12 +113,12 @@ public class WxPayPrePayModel {
     private String sceneInfo;
 
 
-    public String getAppid() {
-        return appid;
+    public String getAppId() {
+        return appId;
     }
 
-    public void setAppid(String appid) {
-        this.appid = appid;
+    public void setAppId(String appId) {
+        this.appId = appId;
     }
 
     public String getBody() {
@@ -294,8 +294,8 @@ public class WxPayPrePayModel {
             data.put("partner_trade_no", model.getPartnerTradeNo());
         }
 
-        if (!StringUtil.isNullorEmpty(model.getAppid())) {
-            data.put("appid", model.getAppid());
+        if (!StringUtil.isNullorEmpty(model.getAppId())) {
+            data.put("appid", model.getAppId());
         }
         if (!StringUtil.isNullorEmpty(model.getMchId())) {
             data.put("mch_id", model.getMchId());
@@ -371,7 +371,7 @@ public class WxPayPrePayModel {
      * @return
      */
     public WxPayPrePayModel(String appId, String mchId, String payKey) {
-        this.setAppid(appId);
+        this.setAppId(appId);
         this.setMchId(mchId);
         this.setPayKey(payKey);
         this.setNonceStr(WxFormatParamUtil.getNonceStr());
