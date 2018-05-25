@@ -1,14 +1,14 @@
-import com.xucg.config.DefaultWeiXinModel;
-import com.xucg.model.WxPayPrePayModel;
-import com.xucg.pay.WxPay;
-
-/**
- * @author xuchenguang
- * @date 2018.05.21
- */
-public class WxPayTest {
-
-    public static void main(String[] args) throws Exception{
+//import com.xucg.config.DefaultWeiXinModel;
+//import com.xucg.model.WxPayPrePayModel;
+//import com.xucg.pay.WxPay;
+//
+///**
+// * @author xuchenguang
+// * @date 2018.05.21
+// */
+//public class WxPayTest {
+//
+//    public static void main(String[] args) throws Exception{
        /* WxPayPrePayModel model = DefaultWeiXinModel.getDefaultWeiXinModel();
 
         //商品描述
@@ -26,19 +26,19 @@ public class WxPayTest {
 
         WxPay.miniAppPay(model);*/
 
-        WxPayPrePayModel model = DefaultWeiXinModel.getDefaultWeiXinModel();
-        //订单编号
-        model.setOutTradeNo("201713468");
-
-        //退款单号
-        model.setOutRefundNo("201713468");
-
-        //订单金额   单位：分
-        model.setTotalFee(1);
-
-        //退款金额   单位：分
-        model.setRefundFee(1);
-
-        WxPay.refund(model,"classpath:\\cert\\apiclient_cert.p12");
-    }
-}
+//        WxPayPrePayModel model = DefaultWeiXinModel.getDefaultWeiXinModel();
+//        //订单编号
+//        model.setOutTradeNo("20180524194005033000001");
+//
+//        //退款单号
+//        model.setOutRefundNo("20180524194005033000001");
+//
+//        //订单金额   单位：分
+//        model.setTotalFee(3700);
+//
+//        //退款金额   单位：分
+//        model.setRefundFee(3700);
+//
+//        WxPay.refund(model,"classpath:\\cert\\apiclient_cert.p12");
+//    }
+//}

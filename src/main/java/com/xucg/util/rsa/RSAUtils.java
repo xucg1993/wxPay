@@ -1,14 +1,13 @@
 package com.xucg.util.rsa;
 
 import org.springframework.util.ResourceUtils;
+import sun.misc.BASE64Decoder;
 
 import javax.crypto.Cipher;
 import java.io.*;
 import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
-
-import static sun.plugin2.util.SystemUtil.decodeBase64;
 
 /**
  * RSA公钥/私钥/签名工具包
@@ -39,7 +38,8 @@ public class RSAUtils {
                     sb.append('\r');
                 }
             }
-            X509EncodedKeySpec pubX509 = new X509EncodedKeySpec(decodeBase64(sb.toString()));
+            BASE64Decoder var1 = new BASE64Decoder();
+            X509EncodedKeySpec pubX509 = new X509EncodedKeySpec(var1.decodeBuffer(sb.toString()));
             KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
             //下行出错  java.security.spec.InvalidKeySpecException: java.security.InvalidKeyException: IOException: DerInputStream.getLength(): lengthTag=127, too big.
             PublicKey publicKey = keyFactory.generatePublic(pubX509);
