@@ -31,9 +31,9 @@ public class WXPayUtil {
      * @return XML数据转换后的Map
      * @throws Exception
      */
-    public static Map<String, Object> xmlToMap(String strXML) throws Exception {
+    public static Map<String, String> xmlToMap(String strXML) throws Exception {
         try {
-            Map<String, Object> data = new HashMap<String, Object>();
+            Map<String, String> data = new HashMap<String, String>();
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
             InputStream stream = new ByteArrayInputStream(strXML.getBytes("UTF-8"));
@@ -67,7 +67,7 @@ public class WXPayUtil {
      * @return XML格式的字符串
      * @throws Exception
      */
-    public static String mapToXml(Map<String, Object> data) throws Exception {
+    public static String mapToXml(Map<String, String> data) throws Exception {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         org.w3c.dom.Document document = documentBuilder.newDocument();
@@ -107,7 +107,7 @@ public class WXPayUtil {
      * @param key  API密钥
      * @return 含有sign字段的XML
      */
-    public static String generateSignedXml(final Map<String, Object> data, String key) throws Exception {
+    public static String generateSignedXml(final Map<String, String> data, String key) throws Exception {
         return generateSignedXml(data, key, SignType.MD5);
     }
 
@@ -119,7 +119,7 @@ public class WXPayUtil {
      * @param signType 签名类型
      * @return 含有sign字段的XML
      */
-    public static String generateSignedXml(final Map<String, Object> data, String key, SignType signType) throws Exception {
+    public static String generateSignedXml(final Map<String, String> data, String key, SignType signType) throws Exception {
         String sign = generateSignature(data, key, signType);
         data.put(WXPayConstants.FIELD_SIGN, sign);
         return mapToXml(data);
@@ -135,7 +135,7 @@ public class WXPayUtil {
      * @throws Exception
      */
     public static boolean isSignatureValid(String xmlStr, String key) throws Exception {
-        Map<String, Object> data = xmlToMap(xmlStr);
+        Map<String, String> data = xmlToMap(xmlStr);
         if (!data.containsKey(WXPayConstants.FIELD_SIGN)) {
             return false;
         }
@@ -151,7 +151,7 @@ public class WXPayUtil {
      * @return 签名是否正确
      * @throws Exception
      */
-    public static boolean isSignatureValid(Map<String, Object> data, String key) throws Exception {
+    public static boolean isSignatureValid(Map<String, String> data, String key) throws Exception {
         return isSignatureValid(data, key, SignType.MD5);
     }
 
@@ -164,7 +164,7 @@ public class WXPayUtil {
      * @return 签名是否正确
      * @throws Exception
      */
-    public static boolean isSignatureValid(Map<String, Object> data, String key, SignType signType) throws Exception {
+    public static boolean isSignatureValid(Map<String, String> data, String key, SignType signType) throws Exception {
         if (!data.containsKey(WXPayConstants.FIELD_SIGN)) {
             return false;
         }
@@ -179,7 +179,7 @@ public class WXPayUtil {
      * @param key  API密钥
      * @return 签名
      */
-    public static String generateSignature(final Map<String, Object> data, String key) throws Exception {
+    public static String generateSignature(final Map<String, String> data, String key) throws Exception {
         return generateSignature(data, key, SignType.MD5);
     }
 
@@ -191,7 +191,7 @@ public class WXPayUtil {
      * @param signType 签名方式
      * @return 签名
      */
-    public static String generateSignature(final Map<String, Object> data, String key, SignType signType) throws Exception {
+    public static String generateSignature(final Map<String, String> data, String key, SignType signType) throws Exception {
         Set<String> keySet = data.keySet();
         String[] keyArray = keySet.toArray(new String[keySet.size()]);
         Arrays.sort(keyArray);

@@ -261,8 +261,8 @@ public class WxPayMicroModel {
      * @param model
      * @return
      */
-    public static Map<String, Object> buildToMap(WxPayMicroModel model) {
-        Map<String, Object> data = new HashMap<>(16);
+    public static Map<String, String> buildToMap(WxPayMicroModel model) {
+        Map<String, String> data = new HashMap<>(16);
 
         if (!StringUtil.isNullorEmpty(model.getAppId())) {
             data.put("appid", model.getAppId());
@@ -305,7 +305,7 @@ public class WxPayMicroModel {
         }
 
         if (model.getTotalFee() != null) {
-            data.put("total_fee", model.getTotalFee());
+            data.put("total_fee", model.getTotalFee().toString());
         }
 
         if (!StringUtil.isNullorEmpty(model.getFeeType())) {
@@ -365,21 +365,6 @@ public class WxPayMicroModel {
      */
     public static String buildPayXml(WxPayMicroModel pay) throws Exception {
         return WXPayUtil.mapToXml(buildToMap(pay));
-    }
-
-    /**
-     * 微信默认配置
-     *
-     * @param appId
-     * @param mchId
-     * @param payKey
-     * @return
-     */
-    public WxPayMicroModel(String appId, String mchId, String payKey) {
-        this.setAppId(appId);
-        this.setMchId(mchId);
-        this.setPayKey(payKey);
-        this.setNonceStr(WxFormatParamUtil.getNonceStr());
     }
 
 }

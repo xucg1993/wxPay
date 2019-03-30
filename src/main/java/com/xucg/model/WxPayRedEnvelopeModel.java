@@ -268,9 +268,9 @@ public class WxPayRedEnvelopeModel {
      * @param redEnvelopeModel
      * @return
      */
-    public static Map<String, Object> buildWeiXinRedEnvelopeModelToMap(WxPayRedEnvelopeModel redEnvelopeModel) {
+    public static Map<String, String> buildWeiXinRedEnvelopeModelToMap(WxPayRedEnvelopeModel redEnvelopeModel) {
 
-        Map<String, Object> data = new HashMap<>(16);
+        Map<String, String> data = new HashMap<>(16);
 
         if (!StringUtil.isNullorEmpty(redEnvelopeModel.getNonceStr())) {
             data.put("nonce_str", redEnvelopeModel.getNonceStr());
@@ -309,11 +309,11 @@ public class WxPayRedEnvelopeModel {
         }
 
         if (redEnvelopeModel.getTotalAmount() != null) {
-            data.put("total_amount", redEnvelopeModel.getTotalAmount());
+            data.put("total_amount", redEnvelopeModel.getTotalAmount().toString());
         }
 
         if (redEnvelopeModel.getTotalNum() != null) {
-            data.put("total_num", redEnvelopeModel.getTotalNum());
+            data.put("total_num", redEnvelopeModel.getTotalNum().toString());
         }
 
         if (!StringUtil.isNullorEmpty(redEnvelopeModel.getWishing())) {

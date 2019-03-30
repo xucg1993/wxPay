@@ -1,6 +1,7 @@
 package com.xucg.pay;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.xucg.config.WxPayConfigEnum;
 import com.xucg.model.ResultJson;
 import com.xucg.model.WxPayPrePayModel;
@@ -16,6 +17,7 @@ import com.xucg.util.wx.WxFormatParamUtil;
 import com.xucg.util.xml.XmlUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,95 +29,34 @@ import java.util.Map;
  * @author xucg
  * @since 2018/3/19
  */
-public class WxPay {
+@Component
+public class WxPay extends Base {
 
     private static final Logger logger = LoggerFactory.getLogger("wxPay sdk");
-
-
-    /*----------------------------关闭订单-----------------------------*/
-    /**
-     * 订单已支付
-     */
-    private static final String ORDERPAID = "ORDERPAID";
-    /**
-     * 系统错误
-     */
-    private static final String SYSTEMERROR = "SYSTEMERROR";
-    /**
-     * 订单已关闭
-     */
-    private static final String ORDERCLOSED = "ORDERCLOSED";
-    /**
-     * 签名错误
-     */
-    private static final String SIGNERROR = "SIGNERROR";
-    /**
-     * 请使用post方法
-     */
-    private static final String REQUIRE_POST_METHOD = "REQUIRE_POST_METHOD";
-    /**
-     * XML格式错误
-     */
-    private static final String XML_FORMAT_ERROR = "XML_FORMAT_ERROR";
-
-    /*-----------------------------查询-----------------------------*/
-    /**
-     * 支付成功
-     */
-    private static final String SUCCESS = "SUCCESS";
-    /**
-     * 转入退款
-     */
-    private static final String REFUND = "REFUND";
-    /**
-     * 未支付
-     */
-    private static final String NOTPAY = "NOTPAY";
-    /**
-     * 已关闭
-     */
-    private static final String CLOSED = "CLOSED";
-    /**
-     * 已撤销（刷卡支付）
-     */
-    private static final String REVOKED = "REVOKED";
-    /**
-     * 用户支付中
-     */
-    private static final String USERPAYING = "USERPAYING";
-    /**
-     * 支付失败(其他原因，如银行返回失败)
-     */
-    private static final String PAYERROR = "PAYERROR";
-
-    /*-----------------------------查询退款---------------------------------*/
-    private static final String REFUNDNOTEXIST = "REFUNDNOTEXIST";
-    private static final String INVALID_TRANSACTIONID = "INVALID_TRANSACTIONID";
-    private static final String PARAM_ERROR = "PARAM_ERROR";
-    private static final String APPID_NOT_EXIST = "APPID_NOT_EXIST";
-    private static final String MCHID_NOT_EXIST = "MCHID_NOT_EXIST";
 
     /**
      * 微信小程序预支付
      *
-     * @param weixinPrePay
+     * @param model
      * @return
      */
-    public static String miniAppPay(WxPayPrePayModel weixinPrePay) {
+    public String miniAppPay(WxPayPrePayModel model) {
 
         try {
+            model = setWeiXinPrePay(model);
+
             //交易类型   JsAPI
-            weixinPrePay.setTradeType(WxPayConfigEnum.WXPAY_JSAPI.getValue());
+            model.setTradeType(WxPayConfigEnum.WXPAY_JSAPI.getValue());
 
             //签名算法计算得出的签名值
-            weixinPrePay.setSign(WxPayPrePayModel.buildSignStr(weixinPrePay));
+            model.setSign(WxPayPrePayModel.buildSignStr(model));
 
-            String payXml = WxPayPrePayModel.buildPayXml(weixinPrePay);
-
+            String payXml = WxPayPrePayModel.buildPayXml(model);
+            logger.info(JSONObject.toJSONString(model));
             //请求统一下单接口
             String result = HttpUtil.post(WxPayConfigEnum.UNIFIEDORDER_URL.getValue(), payXml);
             Map<String, String> xmlValue = XmlUtil.getXmlValue(result);
-            Map map = buildMap(xmlValue, weixinPrePay.getPayKey());
+            Map map = buildMap(xmlValue, model.getPayKey());
             logger.info("微信小程序预支付结果: " + map);
             if (WxFormatParamUtil.isPayReturnSuccess(xmlValue)) {
                 return ResultJson.getResultJsonSuccess(map);
@@ -134,9 +75,11 @@ public class WxPay {
      * @param weixinPrePay
      * @return
      */
-    public static String wapPay(WxPayPrePayModel weixinPrePay) {
+    public String wapPay(WxPayPrePayModel weixinPrePay) {
 
         try {
+            weixinPrePay = setWeiXinPrePay(weixinPrePay);
+
             weixinPrePay.setTradeType(WxPayConfigEnum.WXPAY_MWEB.getValue());
 
             //签名算法计算得出的签名值
@@ -164,18 +107,20 @@ public class WxPay {
     /**
      * 公众号 支付
      *
-     * @param weixinPrePay
+     * @param model
      * @return
      */
-    public static String mpPay(WxPayPrePayModel weixinPrePay) {
+    public String mpPay(WxPayPrePayModel model) {
 
         try {
-            weixinPrePay.setTradeType(WxPayConfigEnum.WXPAY_JSAPI.getValue());
+            model = setWeiXinPrePay(model);
+
+            model.setTradeType(WxPayConfigEnum.WXPAY_JSAPI.getValue());
 
             //签名算法计算得出的签名值
-            weixinPrePay.setSign(WxPayPrePayModel.buildSignStr(weixinPrePay));
+            model.setSign(WxPayPrePayModel.buildSignStr(model));
 
-            String payXml = WxPayPrePayModel.buildPayXml(weixinPrePay);
+            String payXml = WxPayPrePayModel.buildPayXml(model);
 
             //请求统一下单接口
             String result = HttpUtil.post(WxPayConfigEnum.UNIFIEDORDER_URL.getValue(), payXml);
@@ -197,22 +142,24 @@ public class WxPay {
     /**
      * 二维码 支付
      *
-     * @param weixinPrePay
+     * @param model
      * @return
      */
-    public static String scanCodePay(WxPayPrePayModel weixinPrePay) {
+    public String scanCodePay(WxPayPrePayModel model) {
 
         try {
+            model = setWeiXinPrePay(model);
+
             //交易类型
-            weixinPrePay.setTradeType(WxPayConfigEnum.WXPAY_NATIVE.getValue());
+            model.setTradeType(WxPayConfigEnum.WXPAY_NATIVE.getValue());
 
             //用户标识
-            weixinPrePay.setOpenId(null);
+            model.setOpenId(null);
 
             //签名算法计算得出的签名值
-            weixinPrePay.setSign(WxPayPrePayModel.buildSignStr(weixinPrePay));
+            model.setSign(WxPayPrePayModel.buildSignStr(model));
 
-            String payXml = WxPayPrePayModel.buildPayXml(weixinPrePay);
+            String payXml = WxPayPrePayModel.buildPayXml(model);
 
             String result = HttpUtil.post(WxPayConfigEnum.UNIFIEDORDER_URL.getValue(), payXml);
 
@@ -235,19 +182,20 @@ public class WxPay {
     /**
      * APP 支付
      *
-     * @param weixinPrePay
+     * @param model
      * @return
      */
-    public static String appPay(WxPayPrePayModel weixinPrePay) {
+    public String appPay(WxPayPrePayModel model) {
 
         try {
+            model = setWeiXinPrePay(model);
             //支付类型
-            weixinPrePay.setTradeType(WxPayConfigEnum.WXPAY_APP.getValue());
+            model.setTradeType(WxPayConfigEnum.WXPAY_APP.getValue());
 
             //签名算法计算得出的签名值
-            weixinPrePay.setSign(WxPayPrePayModel.buildSignStr(weixinPrePay));
+            model.setSign(WxPayPrePayModel.buildSignStr(model));
 
-            String payXml = WxPayPrePayModel.buildPayXml(weixinPrePay);
+            String payXml = WxPayPrePayModel.buildPayXml(model);
 
             //请求统一下单接口
             String result = HttpUtil.post(WxPayConfigEnum.UNIFIEDORDER_URL.getValue(), payXml);
@@ -300,7 +248,7 @@ public class WxPay {
      * @return
      * @throws IOException
      */
-    public static String callback(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public String callback(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         try {
             //读取参数
@@ -339,15 +287,17 @@ public class WxPay {
     /**
      * 查询退款
      *
-     * @param weiXinPrePay
+     * @param model
      * @return
      */
-    public static String refundQuery(WxPayPrePayModel weiXinPrePay) {
+    public String refundQuery(WxPayPrePayModel model) {
         try {
-            //签名算法计算得出的签名值
-            weiXinPrePay.setSign(WxPayPrePayModel.buildSignStr(weiXinPrePay));
+            model = setWeiXinPrePay(model);
 
-            String payXml = WxPayPrePayModel.buildPayXml(weiXinPrePay);
+            //签名算法计算得出的签名值
+            model.setSign(WxPayPrePayModel.buildSignStr(model));
+
+            String payXml = WxPayPrePayModel.buildPayXml(model);
 
             String result = HttpUtil.post(WxPayConfigEnum.REFUNDQUERY_URL.getValue(), payXml);
 
@@ -415,21 +365,23 @@ public class WxPay {
     /**
      * 申请退款
      *
-     * @param weixinPrePay
+     * @param model
      * @param filePath
      * @return
      * @throws Exception
      */
-    public static String refund(WxPayPrePayModel weixinPrePay, String filePath) throws Exception {
+    public String refund(WxPayPrePayModel model, String filePath) throws Exception {
+
+        model = setWeiXinPrePay(model);
 
         //签名算法计算得出的签名值
-        weixinPrePay.setSign(WxPayPrePayModel.buildSignStr(weixinPrePay));
+        model.setSign(WxPayPrePayModel.buildSignStr(model));
 
         //申请退款XML
-        String payXml = WxPayPrePayModel.buildPayXml(weixinPrePay);
+        String payXml = WxPayPrePayModel.buildPayXml(model);
 
         //请求微信退款接口
-        String result = ClientCustomSSL.request(WxPayConfigEnum.REFUND_URL.getValue(), weixinPrePay.getMchId(), payXml, filePath);
+        String result = ClientCustomSSL.request(WxPayConfigEnum.REFUND_URL.getValue(), model.getMchId(), payXml, filePath);
 
         //申请退款结果
         Map<String, String> xmlValue = XmlUtil.getXmlValue(result);
@@ -450,7 +402,7 @@ public class WxPay {
      * @param response
      * @throws IOException
      */
-    public static String refundCallback(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public String refundCallback(HttpServletRequest request, HttpServletResponse response) throws IOException {
         //读取参数
         String xmlData = RequestUtil.getRequestBody(request);
 
@@ -526,13 +478,13 @@ public class WxPay {
      *
      * @return
      */
-    public static String query(WxPayPrePayModel weiXinPrePay) {
+    public String query(WxPayPrePayModel model) {
         try {
             //签名算法计算得出的签名值
-            weiXinPrePay.setSign(WxPayPrePayModel.buildSignStr(weiXinPrePay));
+            model.setSign(WxPayPrePayModel.buildSignStr(model));
 
             //将预支付对象封装成Xml
-            String payXml = WxPayPrePayModel.buildPayXml(weiXinPrePay);
+            String payXml = WxPayPrePayModel.buildPayXml(model);
 
             //请求接口
             String result = HttpUtil.post(WxPayConfigEnum.ORDERQUERY_URL.getValue(), payXml);
@@ -601,14 +553,17 @@ public class WxPay {
      * 关闭订单
      * out_trade_no 商户订单号
      *
-     * @param weiXinPrePay
+     * @param model
      */
-    public static String close(WxPayPrePayModel weiXinPrePay) {
+    public String close(WxPayPrePayModel model) {
         //签名算法计算得出的签名值
         try {
-            weiXinPrePay.setSign(WxPayPrePayModel.buildSignStr(weiXinPrePay));
 
-            String payXml = WxPayPrePayModel.buildPayXml(weiXinPrePay);
+            model = setWeiXinPrePay(model);
+
+            model.setSign(WxPayPrePayModel.buildSignStr(model));
+
+            String payXml = WxPayPrePayModel.buildPayXml(model);
 
             String result = HttpUtil.post(WxPayConfigEnum.CLOSEORDER_URL.getValue(), payXml);
 

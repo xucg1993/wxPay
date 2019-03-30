@@ -16,7 +16,7 @@ public class GetPublicKey {
     private static final String URL = "https://fraud.mch.weixin.qq.com/risk/getpublickey";
 
     public static String request(String mchId, String payKey, String filePath) throws Exception {
-        Map<String, Object> data = new HashMap<>(16);
+        Map<String, String> data = new HashMap<>(16);
         data.put("mch_id", mchId);
         data.put("nonce_str", WxFormatParamUtil.getNonceStr());
         data.put("sign_type", "MD5");
@@ -34,7 +34,7 @@ public class GetPublicKey {
 
     public static void main(String[] args) throws Exception {
         String requestXml = request("1502029451", "WRYEC0EgrjGdbxU5AVZBRpYQ7r95Dmc9", "C:\\Users\\lili\\Desktop\\apiclient_cert.p12");
-        Map<String, Object> map = WXPayUtil.xmlToMap(requestXml);
+        Map<String, String> map = WXPayUtil.xmlToMap(requestXml);
         String returnMsg = map.get("return_msg").toString();
         String resultCode = map.get("result_code").toString();
         String mchId = map.get("mch_id").toString();

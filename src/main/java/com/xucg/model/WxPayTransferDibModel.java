@@ -200,9 +200,9 @@ public class WxPayTransferDibModel {
      * @param model
      * @return
      */
-    public static Map<String, Object> buildToMap(WxPayTransferDibModel model) {
+    public static Map<String, String> buildToMap(WxPayTransferDibModel model) {
 
-        Map<String, Object> data = new HashMap<>(16);
+        Map<String, String> data = new HashMap<>(16);
 
         if (!StringUtil.isNullorEmpty(model.getMchAppId())) {
             data.put("mch_appid", model.getMchAppId());
@@ -241,7 +241,7 @@ public class WxPayTransferDibModel {
         }
 
         if (model.getAmount() != null) {
-            data.put("amount", model.getAmount());
+            data.put("amount", model.getAmount().toString());
         }
 
         if (!StringUtil.isNullorEmpty(model.getDesc())) {

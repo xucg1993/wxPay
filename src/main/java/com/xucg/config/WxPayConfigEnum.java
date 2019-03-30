@@ -18,6 +18,19 @@ public enum WxPayConfigEnum {
 
     CLOSEORDER_URL("关闭订单URL", "https://api.mch.weixin.qq.com/pay/closeorder"),
 
+    /*微信支付仿真系統*/
+//    UNIFIEDORDER_URL("统一下单URL", "https://api.mch.weixin.qq.com/sandboxnew/pay/unifiedorder"),
+//
+//    MICRO_PAY_URL("统一下单URL", "https://api.mch.weixin.qq.com/sandboxnew/pay/micropay"),
+//
+//    ORDERQUERY_URL("查询订单URL", "https://api.mch.weixin.qq.com/sandboxnew/pay/orderquery"),
+//
+//    REFUND_URL("申请退款URL", "https://api.mch.weixin.qq.com/sandboxnew/secapi/pay/refund"),
+//
+//    REFUNDQUERY_URL("查询退款URL", "https://api.mch.weixin.qq.com/sandboxnew/pay/refundquery"),
+//
+//    CLOSEORDER_URL("关闭订单URL", "https://api.mch.weixin.qq.com/sandboxnew/pay/closeorder"),
+
     WXPAY_NATIVE("原生扫码支付", "NATIVE"),
 
     WXPAY_JSAPI("小程序支付", "JSAPI"),

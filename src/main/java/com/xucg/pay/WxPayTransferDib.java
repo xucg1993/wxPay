@@ -7,6 +7,7 @@ import com.xucg.util.wx.WxFormatParamUtil;
 import com.xucg.util.xml.XmlUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
@@ -14,7 +15,8 @@ import java.util.Map;
  * @author xuchenguang
  * @date 2018.05.07
  */
-public class WxPayTransferDib {
+@Component
+public class WxPayTransferDib extends Base {
     private static final Logger logger = LoggerFactory.getLogger("wxPay sdk");
 
     private static final String TRANSFERS_URL = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
@@ -27,9 +29,11 @@ public class WxPayTransferDib {
      * @return
      * @throws Exception
      */
-    public static String request(WxPayTransferDibModel model, String filePath) throws Exception {
+    public String request(WxPayTransferDibModel model, String filePath) throws Exception {
 
         try {
+            model = setWxPayTransferDibModel(model);
+
             //签名算法计算得出的签名值
             model.setSign(WxPayTransferDibModel.buildSignStr(model));
 

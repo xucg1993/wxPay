@@ -12,6 +12,7 @@ import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.*;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ public class HttpUtil {
      * post发送文件
      */
     public static String postWeixinMaterial(String url, String imageLocalPath, Map<String, String> paramMap) {
+
         File file = new File(imageLocalPath);
         PostMethod method = new PostMethod(url);
         HttpClient client = new HttpClient();

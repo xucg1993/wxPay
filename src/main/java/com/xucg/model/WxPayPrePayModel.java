@@ -1,9 +1,11 @@
 package com.xucg.model;
 
 import com.xucg.config.WxPayConfigEnum;
+import com.xucg.config.WxPayConfigService;
 import com.xucg.util.string.StringUtil;
 import com.xucg.util.wx.WXPayUtil;
 import com.xucg.util.wx.WxFormatParamUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -287,8 +289,8 @@ public class WxPayPrePayModel {
      * @param model
      * @return
      */
-    public static Map<String, Object> buildToMap(WxPayPrePayModel model) {
-        Map<String, Object> data = new HashMap<>(16);
+    public static Map<String, String> buildToMap(WxPayPrePayModel model) {
+        Map<String, String> data = new HashMap<>(16);
 
         if (!StringUtil.isNullorEmpty(model.getPartnerTradeNo())) {
             data.put("partner_trade_no", model.getPartnerTradeNo());
@@ -322,10 +324,10 @@ public class WxPayPrePayModel {
             data.put("spbill_create_ip", model.getSpbillCreateIp());
         }
         if (model.getRefundFee() != null) {
-            data.put("refund_fee", model.getRefundFee());
+            data.put("refund_fee", model.getRefundFee().toString());
         }
         if (model.getTotalFee() != null) {
-            data.put("total_fee", model.getTotalFee());
+            data.put("total_fee", model.getTotalFee().toString());
         }
         if (!StringUtil.isNullorEmpty(model.getTradeType()) && model.getTradeType().equals(WxPayConfigEnum.WXPAY_MWEB.getValue())) {
             data.put("scene_info", model.getSceneInfo());
@@ -370,11 +372,17 @@ public class WxPayPrePayModel {
      * @param payKey
      * @return
      */
-    public WxPayPrePayModel(String appId, String mchId, String payKey) {
-        this.setAppId(appId);
-        this.setMchId(mchId);
-        this.setPayKey(payKey);
+    @Autowired
+    WxPayConfigService wxPayConfigService;
+
+    public WxPayPrePayModel(WxPayConfigService wxPayConfigService) {
+        this.setAppId(wxPayConfigService.getAppId());
+        this.setMchId(wxPayConfigService.getMchId());
+        this.setPayKey(wxPayConfigService.getPayKey());
         this.setNonceStr(WxFormatParamUtil.getNonceStr());
+    }
+
+    public WxPayPrePayModel() {
     }
 
 }

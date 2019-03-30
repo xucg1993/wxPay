@@ -161,9 +161,9 @@ public class WxPayTransferBankModel {
      * @param model
      * @return
      */
-    public static Map<String, Object> buildToMap(WxPayTransferBankModel model) {
+    public static Map<String, String> buildToMap(WxPayTransferBankModel model) {
 
-        Map<String, Object> data = new HashMap<>(16);
+        Map<String, String> data = new HashMap<>(16);
 
         if (!StringUtil.isNullorEmpty(model.getMchId())) {
             data.put("mch_id", model.getMchId());
@@ -193,7 +193,7 @@ public class WxPayTransferBankModel {
         }
 
         if (model.getAmount() != null) {
-            data.put("amount", model.getAmount());
+            data.put("amount", model.getAmount().toString());
         }
 
         if (!StringUtil.isNullorEmpty(model.getDesc())) {

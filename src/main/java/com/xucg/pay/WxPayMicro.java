@@ -8,6 +8,7 @@ import com.xucg.util.wx.WxFormatParamUtil;
 import com.xucg.util.xml.XmlUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
@@ -17,7 +18,8 @@ import java.util.Map;
  * @author xuchenguang
  * @date 2018.05.24
  */
-public class WxPayMicro {
+@Component
+public class WxPayMicro extends Base {
 
     private static final Logger logger = LoggerFactory.getLogger("wxPay sdk");
 
@@ -27,8 +29,9 @@ public class WxPayMicro {
      * @param model
      * @return
      */
-    public static String request(WxPayMicroModel model) throws Exception {
+    public String request(WxPayMicroModel model) throws Exception {
 
+        model = setWxPayMicroModel(model);
         //签名算法计算得出的签名值
         model.setSign(WxPayMicroModel.buildSignStr(model));
 
