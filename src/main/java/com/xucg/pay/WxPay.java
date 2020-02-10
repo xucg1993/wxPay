@@ -621,4 +621,9 @@ public class WxPay extends Base {
     }
 
 
+    public static void main(String[] args) {
+        String key = EncodeUtil.getMD5For32UTF8("H68LB0G5CyeFArcYleQh93GYJP6U2a8X");
+
+        System.out.println(key);
+    }
 }

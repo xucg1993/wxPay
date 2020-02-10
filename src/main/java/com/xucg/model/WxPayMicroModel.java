@@ -2,7 +2,6 @@ package com.xucg.model;
 
 import com.xucg.util.string.StringUtil;
 import com.xucg.util.wx.WXPayUtil;
-import com.xucg.util.wx.WxFormatParamUtil;
 
 import java.util.HashMap;
 import java.util.Map;

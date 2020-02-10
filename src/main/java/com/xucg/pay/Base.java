@@ -1,14 +1,11 @@
 package com.xucg.pay;
 
-import com.alibaba.fastjson.JSONObject;
 import com.xucg.config.WxPayConfigService;
 import com.xucg.model.WxPayMicroModel;
 import com.xucg.model.WxPayPrePayModel;
 import com.xucg.model.WxPayTransferDibModel;
 import com.xucg.util.wx.WxFormatParamUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.HashMap;
 
 /**
  * @author xuchenguang

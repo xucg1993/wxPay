@@ -1,17 +1,11 @@
-/*
-import com.xucg.config.DefaultWeiXinModel;
-import com.xucg.model.WxPayPrePayModel;
-import com.xucg.pay.WxPay;
-
-*/
 /**
  * @author xuchenguang
  * @date 2018.05.21
- *//*
+ */
 
 public class WxPayTest {
 
-    public static void main(String[] args) throws Exception{
+   /* public static void main(String[] args) throws Exception{
         WxPayPrePayModel model = DefaultWeiXinModel.getDefaultWeiXinModel();
 
         //商品描述
@@ -43,6 +37,7 @@ public class WxPayTest {
 //        model.setRefundFee(3700);
 //
 //        WxPay.refund(model,"classpath:\\cert\\apiclient_cert.p12");
-    }
+    }*/
+
+
 }
-*/

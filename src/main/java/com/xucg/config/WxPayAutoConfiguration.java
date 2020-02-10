@@ -26,6 +26,4 @@ public class WxPayAutoConfiguration {
     WxPayConfigService wxPayConfigService() {
         return new WxPayConfigService(wxPayProperties);
     }
-
-
 }
